@@ -1,0 +1,19 @@
+{
+  "name": "mcg-web",
+  "version": "0.1.0",
+  "repository": "https://github.com/printer83mph/mcg-web",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "build": "turbo build"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.3",
+    "turbo": "^1.7.3"
+  },
+  "workspaces": [
+    "apps/*"
+  ]
+}
