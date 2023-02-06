@@ -1,6 +1,11 @@
 {
   "env": { "browser": true, "es2021": true },
-  "extends": ["custom", "plugin:react/recommended", "prettier"],
+  "extends": [
+    "custom",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": { "jsx": true },
@@ -16,7 +21,16 @@
       "version": "detect"
     }
   },
-  "plugins": ["react", "@typescript-eslint"],
-  "rules": { "react/react-in-jsx-scope": "off" },
+  "plugins": ["react", "react-hooks", "@typescript-eslint"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/function-component-definition": [
+      "warn",
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ]
+  },
   "ignorePatterns": ["*.cjs"]
 }

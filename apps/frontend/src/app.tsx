@@ -3,7 +3,7 @@ import io from 'socket.io-client'
 
 const socket = io(import.meta.env.VITE_WS_URL)
 
-export function App() {
+export const App = () => {
   useEffect(() => {
     socket.on('connect', () => {
       console.log('connected!')
@@ -14,7 +14,7 @@ export function App() {
     })
 
     socket.on('hello', ({ hello }: { hello: string }) => {
-      console.log('got hello:', hello)
+      alert(`got hello: ${hello}`)
     })
 
     return () => {
