@@ -1,10 +1,36 @@
 // Require the framework and instantiate it
 import _fastify from 'fastify'
-const fastify = _fastify({ logger: true })
+import fastifyCors from '@fastify/cors'
+import fastifySocketIO from 'fastify-socket.io'
+import dotenv from 'dotenv'
 
-// Declare a route
-fastify.get('/', async () => {
-  return { hello: 'world' }
+dotenv.config()
+
+const fastify = _fastify({ logger: true })
+fastify.register(fastifyCors, {
+  origin: '*',
+  allowedHeaders: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+})
+fastify.register(fastifySocketIO, {
+  cors: {
+    origin: process.env.FRONTEND_URL,
+    allowedHeaders: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  },
+})
+
+fastify.ready((err) => {
+  if (err) {
+    throw err
+  }
+
+  fastify.io.on('connection', (socket) => {
+    console.log('new connection:', socket.id)
+
+    socket.on('ping', () => {
+      console.log('recieved ping!')
+      fastify.io.emit('hello', { hello: 'world' })
+    })
+  })
 })
 
 // Run the server!

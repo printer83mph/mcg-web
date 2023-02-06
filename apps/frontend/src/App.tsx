@@ -1,41 +1,39 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
+import io from 'socket.io-client'
 
-function App() {
-  const [content, setContent] = useState<
-    { fetched: false } | { fetched: true; data: string }
-  >({ fetched: false })
+const socket = io(import.meta.env.VITE_WS_URL)
 
-  const fetchController = useRef<AbortController | null>(null)
-
-  const fetchData = async () => {
-    if (fetchController.current) {
-      fetchController.current.abort()
-    }
-    fetchController.current = new AbortController()
-    try {
-      const res = await fetch('/api', {
-        signal: fetchController.current.signal,
-      })
-      setContent({
-        fetched: true,
-        data: ((await res.json()) as { hello: string }).hello,
-      })
-      fetchController.current = null
-    } catch (err) {
-      console.error('Fetch error:', err)
-    }
-  }
-
+export function App() {
   useEffect(() => {
-    fetchData()
-  }, [])
+    socket.on('connect', () => {
+      console.log('connected!')
+    })
 
+    socket.on('disconnect', () => {
+      console.log('disconnected')
+    })
+
+    socket.on('hello', ({ hello }: { hello: string }) => {
+      console.log('got hello:', hello)
+    })
+
+    return () => {
+      socket.off('connect')
+      socket.off('disconnect')
+      socket.off('hello')
+    }
+  }, [])
   return (
     <div className="text-4xl container mx-auto mt-4">
-      Data: {content.fetched || 'Fetching...'}
-      {content.fetched && content.data}
+      <button
+        onClick={(evt) => {
+          evt.preventDefault()
+          socket.emit('ping')
+          console.log('emitted ping')
+        }}
+      >
+        <>Emit &quot;ping&quot;</>
+      </button>
     </div>
   )
 }
-
-export default App
