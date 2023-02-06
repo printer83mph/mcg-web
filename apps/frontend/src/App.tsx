@@ -1,32 +1,39 @@
-import { useState } from "react"
-import reactLogo from "./assets/react.svg"
-import "./App.css"
+import { useEffect, useRef, useState } from 'react'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [content, setContent] = useState<
+    { fetched: false } | { fetched: true; data: string }
+  >({ fetched: false })
+
+  const fetchController = useRef<AbortController | null>(null)
+
+  const fetchData = async () => {
+    if (fetchController.current) {
+      fetchController.current.abort()
+    }
+    fetchController.current = new AbortController()
+    try {
+      const res = await fetch('/api', {
+        signal: fetchController.current.signal,
+      })
+      setContent({
+        fetched: true,
+        data: ((await res.json()) as { hello: string }).hello,
+      })
+      fetchController.current = null
+    } catch (err) {
+      console.error('Fetch error:', err)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div className="text-4xl container mx-auto mt-4">
+      Data: {content.fetched || 'Fetching...'}
+      {content.fetched && content.data}
     </div>
   )
 }
