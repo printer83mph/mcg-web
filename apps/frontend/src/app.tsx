@@ -26,13 +26,14 @@ export const App = () => {
   return (
     <div className="text-4xl container mx-auto mt-4">
       <button
+        type="button"
         onClick={(evt) => {
           evt.preventDefault()
           socket.emit('ping')
           console.log('emitted ping')
         }}
       >
-        <>Emit &quot;ping&quot;</>
+        Emit &quot;ping&quot;
       </button>
     </div>
   )

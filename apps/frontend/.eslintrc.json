@@ -1,36 +1,12 @@
 {
+  "root": true,
   "env": { "browser": true, "es2021": true },
-  "extends": [
-    "custom",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "prettier"
-  ],
-  "parser": "@typescript-eslint/parser",
+  "extends": ["custom/react"],
   "parserOptions": {
+    "project": ["tsconfig.json", "tsconfig.node.json"],
     "ecmaFeatures": { "jsx": true },
     "ecmaVersion": "latest",
     "sourceType": "module"
-  },
-  "settings": {
-    "import/resolver": {
-      "typescript": true,
-      "node": true
-    },
-    "react": {
-      "version": "detect"
-    }
-  },
-  "plugins": ["react", "react-hooks", "@typescript-eslint"],
-  "rules": {
-    "react/react-in-jsx-scope": "off",
-    "react/function-component-definition": [
-      "warn",
-      {
-        "namedComponents": "arrow-function",
-        "unnamedComponents": "arrow-function"
-      }
-    ]
   },
   "ignorePatterns": ["*.cjs"]
 }

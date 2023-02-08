@@ -17,5 +17,12 @@
     "apps/*",
     "packages/*"
   ],
-  "packageManager": "yarn@3.4.1"
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "typescript",
+        "eslint"
+      ]
+    }
+  }
 }
