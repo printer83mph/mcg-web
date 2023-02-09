@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
-import io from 'socket.io-client'
 
-const socket = io(import.meta.env.VITE_WS_URL)
+import { socket } from './lib/socket'
 
 export const App = () => {
   useEffect(() => {
@@ -13,14 +12,9 @@ export const App = () => {
       console.log('disconnected')
     })
 
-    socket.on('hello', ({ hello }: { hello: string }) => {
-      alert(`got hello: ${hello}`)
-    })
-
     return () => {
       socket.off('connect')
       socket.off('disconnect')
-      socket.off('hello')
     }
   }, [])
   return (
@@ -29,7 +23,6 @@ export const App = () => {
         type="button"
         onClick={(evt) => {
           evt.preventDefault()
-          socket.emit('ping')
           console.log('emitted ping')
         }}
       >

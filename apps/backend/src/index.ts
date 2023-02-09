@@ -4,6 +4,8 @@ import fastifyCors from '@fastify/cors'
 import fastifySocketIO from 'fastify-socket.io'
 import dotenv from 'dotenv'
 
+import { SocketInstance, SocketServer } from './types/socket'
+
 dotenv.config()
 
 const fastify = _fastify({ logger: true })
@@ -23,13 +25,12 @@ fastify.ready((err) => {
     throw err
   }
 
-  fastify.io.on('connection', (socket) => {
+  const io = fastify.io as SocketServer
+
+  io.on('connection', (socket: SocketInstance) => {
     console.log('new connection:', socket.id)
 
-    socket.on('ping', () => {
-      console.log('recieved ping!')
-      fastify.io.emit('hello', { hello: 'world' })
-    })
+    // TODO: logic lol
   })
 })
 

@@ -2,6 +2,7 @@
   "name": "backend",
   "private": true,
   "version": "0.1.0",
+  "types": "src/types.d.ts",
   "scripts": {
     "dev": "nodemon ./src/index.ts",
     "lint": "eslint src/**/*.ts && tsc --noEmit",
